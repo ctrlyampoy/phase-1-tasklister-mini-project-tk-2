@@ -1,22 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('#create-task-form');
-  const taskList = document.querySelector('#tasks');
+// Wait for the DOM to be fully loaded before running the script
+document.addEventListener('DOMContentLoaded', function () {
+  const taskForm = document.getElementById('create-task-form');  // More explicit naming
+  const taskContainer = document.getElementById('tasks');       // Slightly different name for clarity
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault(); // prevents the form from submitting in case the input field is blank
+  taskForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // Stop the page from refreshing on form submit
+      
+      const taskInputField = document.getElementById('new-task-description'); 
+      const taskText = taskInputField.value.trim(); // Trim to avoid accidental empty spaces
 
-    // this receives the input value
-    const taskInput = document.querySelector('#new-task-description');
-    const taskDescription = taskInput.value;
+      if (taskText === '') {
+          console.warn('No task entered. Skipping...'); // Added a basic warning for empty inputs
+          return;
+      }
 
-    // Create a new list item and add the task description
-    const taskItem = document.createElement('li');
-    taskItem.textContent = taskDescription;
+      const newTaskItem = document.createElement('li');
+      newTaskItem.textContent = taskText;
 
-    // this adds the new task to the task list
-    taskList.appendChild(taskItem);
+      taskContainer.appendChild(newTaskItem); // Append new task to the list
 
-    // this clears the input field
-    taskInput.value = '';
+      taskInputField.value = ''; // Clear the input after adding the task
   });
-}); 
+});
