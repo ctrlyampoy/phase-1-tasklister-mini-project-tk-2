@@ -1,24 +1,39 @@
-// Wait for the DOM to be fully loaded before running the script
-document.addEventListener('DOMContentLoaded', function () {
-  const taskForm = document.getElementById('create-task-form');  // More explicit naming
-  const taskContainer = document.getElementById('tasks');       // Slightly different name for clarity
+document.addEventListener('DOMContentLoaded', () => {
+  // gather the form and task list items.
+  const form = document.getElementById('create-task-form');
+  const taskList = document.getElementById('tasks');
+  
+  // event listener for the form's submission
+  form.addEventListener('submit', (e) => {
+    e.preventDefault(); // prevent the form from refreshing the page 
 
-  taskForm.addEventListener('submit', function (e) {
-      e.preventDefault(); // Stop the page from refreshing on form submit
-      
-      const taskInputField = document.getElementById('new-task-description'); 
-      const taskText = taskInputField.value.trim(); // Trim to avoid accidental empty spaces
+    // receive the value of the new task description input
+    const taskDescription = document.getElementById('new-task-description').value;
 
-      if (taskText === '') {
-          console.warn('No task entered. Skipping...'); // Added a basic warning for empty inputs
-          return;
-      }
-
-      const newTaskItem = document.createElement('li');
-      newTaskItem.textContent = taskText;
-
-      taskContainer.appendChild(newTaskItem); // Append new task to the list
-
-      taskInputField.value = ''; // Clear the input after adding the task
+    if (taskDescription.trim() !== '') {
+      addTask(taskDescription); // new task added to the list
+      form.reset(); // reset the form fields to blank
+    } else {
+      alert('Task description cannot be empty!');
+    }
   });
+
+  // addTask function 
+  function addTask(description) {
+    const li = document.createElement('li'); // a new item is listed
+    li.textContent = description; // assigns the textContent to "description" variable
+
+    // make a delete button for the task
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'x';
+    
+
+    // event listener for the delete button
+    deleteButton.addEventListener('click', () => {
+      li.remove(); // task is removed when the x is clicked
+    });
+
+    li.appendChild(deleteButton); // delete button is added through the "li" tag in html
+    taskList.appendChild(li); // appendChild adds elements below the <ul id="tasks"> which is the parent element
+  }
 });
